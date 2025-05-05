@@ -93,9 +93,10 @@ class Task(models.Model):
         ordering = ["name"]
 
     def clean(self) -> None:
-        if self.deadline < timezone.now() + timedelta(hours=2):
+        super().clean()
+        if self.deadline and self.deadline < timezone.now() + timedelta(minutes=30):
             raise ValidationError(
-                "Deadline must be at least 2 hours from now."
+                "Deadline must be at least 30 minutes from now."
             )
 
     def __str__(self) -> str:
