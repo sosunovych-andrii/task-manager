@@ -34,6 +34,13 @@ class WorkerAdmin(UserAdmin):
         "position",
         "project"
     )
+    list_filter = (
+        "is_superuser",
+        "is_active",
+        "is_staff",
+        "position",
+        "project"
+    )
     list_select_related = ("position", "project")
     fieldsets = (
         (
@@ -75,13 +82,7 @@ class WorkerAdmin(UserAdmin):
             }
         ),
     )
-    list_filter = (
-        "is_superuser",
-        "is_active",
-        "is_staff",
-        "position",
-        "project"
-    )
+    autocomplete_fields = ("position", "project")
 
 
 @admin.register(TaskType)
@@ -100,9 +101,6 @@ class TaskAdmin(admin.ModelAdmin):
         "project",
         "worker"
     )
-    list_select_related = ("task_type", "project", "worker")
-    list_editable = ("deadline",)
-    search_fields = ("name", "description")
     list_filter = (
         "is_completed",
         "deadline",
@@ -111,4 +109,8 @@ class TaskAdmin(admin.ModelAdmin):
         "project",
         "worker"
     )
+    list_select_related = ("task_type", "project", "worker")
+    list_editable = ("deadline",)
+    search_fields = ("name", "description")
     date_hierarchy = "deadline"
+    autocomplete_fields = ("project", "worker")
