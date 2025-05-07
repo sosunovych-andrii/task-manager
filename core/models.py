@@ -90,7 +90,7 @@ class Task(models.Model):
     )
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["deadline"]
 
     def clean(self) -> None:
         super().clean()
