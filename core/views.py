@@ -1,3 +1,19 @@
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
-# Create your views here.
+from core.models import Project, Task, Worker
+
+
+def index(request: HttpRequest) -> HttpResponse:
+    """View function for the home page of the site."""
+    num_projects = Project.objects.count()
+    num_tasks = Task.objects.count()
+    num_workers = Worker.objects.count()
+
+    context = {
+        "num_projects": num_projects,
+        "num_tasks": num_tasks,
+        "num_workers": num_workers
+    }
+
+    return render(request, "core/index.html", context=context)
