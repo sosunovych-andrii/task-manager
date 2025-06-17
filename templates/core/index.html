@@ -11,17 +11,17 @@
     <div class="stat-box tasks-box">
       <span class="stat-icon">📋</span>
       <h3 class="stat-number">{{ num_tasks }}</h3>
-      <p class="stat-label">Tasks</p>
+      <p class="stat-label">Task{% if num_tasks != 1 %}s{% endif %}</p>
     </div>
     <div class="stat-box workers-box">
       <span class="stat-icon">👨🏽‍💼</span>
       <h3 class="stat-number">{{ num_workers }}</h3>
-      <p class="stat-label">Workers</p>
+      <p class="stat-label">Worker{% if num_workers != 1 %}s{% endif %}</p>
     </div>
     <div class="stat-box projects-box">
       <span class="stat-icon">📁</span>
       <h3 class="stat-number">{{ num_projects }}</h3>
-      <p class="stat-label">Projects</p>
+      <p class="stat-label">Project{% if num_projects != 1 %}s{% endif %}</p>
     </div>
     <div class="stat-box efficiency-box">
       <span class="stat-icon">🚀</span>
