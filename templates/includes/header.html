@@ -20,7 +20,7 @@
         </li>
       {% else %}
         <li><a href="{% url 'login' %}">Login</a></li>
-        <li><a class="sign-up-link" href="#">Sign Up</a></li>
+        <li><a class="sign-up-link" href="{% url 'core:sign-up' %}">Sign Up</a></li>
       {% endif %}
     </ul>
   </nav>
