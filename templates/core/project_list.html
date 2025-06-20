@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="project-grid">
+    {% for project in project_list %}
+      <div class="project-card">
+        <h3>{{ project.name }}</h3>
+        <p><strong>Description:<br></strong>{{ project.description }}</p>
+        <p><strong>Tasks:</strong> {{ project.tasks_count }}</p>
+        <p><strong>Workers:</strong> {{ project.workers_count }}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

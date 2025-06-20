@@ -1,6 +1,9 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.views import generic
 
 from core.forms import SignUpForm
 from core.models import Project, Task, Worker
@@ -35,3 +38,20 @@ def sign_up(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
                 login(request, user)
                 return redirect("/")
     return render(request, "registration/sign_up.html", {"form": form})
+
+
+class ProjectListView(LoginRequiredMixin, generic.ListView):
+    """
+    View class that displays a paginated list of projects
+    with related workers and tasks count.
+    """
+    model = Project
+    context_object_name = "project_list"
+    template_name = "core/project_list.html"
+    paginate_by = 8
+
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            workers_count=Count("workers"),
+            tasks_count=Count("tasks")
+        )
