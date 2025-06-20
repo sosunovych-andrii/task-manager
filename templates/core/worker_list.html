@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="worker-grid">
+    {% for worker in worker_list %}
+      <div class="worker-card">
+        <h3>{{ worker.username }}</h3>
+        <p><strong>First name: </strong>{{ worker.first_name }}</p>
+        <p><strong>Last name: </strong>{{ worker.last_name }}</p>
+        <p><strong>Email: </strong>{{ worker.email }}</p>
+        <p><strong>Position: </strong>{{ worker.position.name }}</p>
+        <p><strong>Project: </strong>{{ worker.project.name }}</p>
+        <p><strong>Total assigned tasks: </strong>{{ worker.tasks_count }}</p>
+        <p><strong>Completed tasks: </strong>{{ worker.completed_tasks }}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -55,3 +55,19 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
             workers_count=Count("workers"),
             tasks_count=Count("tasks")
         )
+
+
+class WorkerListView(LoginRequiredMixin, generic.ListView):
+    """
+    View class that displays a paginated list of workers
+    with related position, project fields and tasks count
+    """
+    model = Worker
+    context_object_name = "worker_list"
+    template_name = "core/worker_list.html"
+    paginate_by = 8
+
+    def get_queryset(self):
+        return super().get_queryset().select_related(
+            "position", "project"
+        ).annotate(tasks_count=Count("tasks"))
