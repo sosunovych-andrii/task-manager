@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="project-grid">
+  <div class="grid">
     {% for project in project_list %}
-      <div class="project-card">
+      <div class="card">
         <h3>{{ project.name }}</h3>
         <p><strong>Description:<br></strong>{{ project.description }}</p>
         <p><strong>Tasks:</strong> {{ project.tasks_count }}</p>

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="worker-grid">
+  <div class="grid">
     {% for worker in worker_list %}
-      <div class="worker-card">
+      <div class="card">
         <h3>{{ worker.username }}</h3>
         <p><strong>First name: </strong>{{ worker.first_name }}</p>
         <p><strong>Last name: </strong>{{ worker.last_name }}</p>
