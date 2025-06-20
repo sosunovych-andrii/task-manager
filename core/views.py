@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
+from django.db.models import Count, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -50,7 +50,7 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     template_name = "core/project_list.html"
     paginate_by = 8
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return super().get_queryset().annotate(
             workers_count=Count("workers"),
             tasks_count=Count("tasks")
@@ -67,7 +67,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     template_name = "core/worker_list.html"
     paginate_by = 8
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return super().get_queryset().select_related(
             "position", "project"
         ).annotate(tasks_count=Count("tasks"))
