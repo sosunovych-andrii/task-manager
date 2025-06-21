@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.db.models import Count, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
@@ -100,16 +100,22 @@ class MyProfileView(LoginRequiredMixin, generic.UpdateView):
         return self.request.user
 
 
-class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Worker
     form_class = WorkerForm
     context_object_name = "worker"
     template_name = "core/worker_form.html"
     success_url = reverse_lazy("core:worker-list")
 
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser
 
-class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class WorkerDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Worker
     context_object_name = "worker"
     template_name = "core/worker_delete.html"
     success_url = reverse_lazy("core:worker-list")
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser
