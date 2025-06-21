@@ -35,13 +35,15 @@ class Worker(AbstractUser):
         to=Position,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="workers"
+        related_name="workers",
+        blank=True
     )
     project = models.ForeignKey(
         to=Project,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="workers"
+        related_name="workers",
+        blank=True
     )
 
     class Meta:
@@ -77,18 +79,21 @@ class Task(models.Model):
         to=TaskType,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="tasks"
+        related_name="tasks",
+        blank=True
     )
     project = models.ForeignKey(
         to=Project,
         on_delete=models.CASCADE,
-        related_name="tasks"
+        related_name="tasks",
+        blank=True
     )
     worker = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="tasks"
+        related_name="tasks",
+        blank=True
     )
 
     class Meta:
