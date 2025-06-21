@@ -1,0 +1,10 @@
+.my-profile-container {
+  max-width: 85%;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  background-color: #0f1d3a;
+  border: 1px solid #cce3ff;
+  border-radius: 1rem;
+  color: #cce3ff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}

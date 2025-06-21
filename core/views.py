@@ -1,11 +1,13 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.db.models import Count, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import generic
 
-from core.forms import SignUpForm
+from core.forms import SignUpForm, MyProfileForm
 from core.models import Project, Task, Worker
 
 
@@ -87,3 +89,12 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         return super().get_queryset().select_related(
             "task_type", "project", "worker"
         )
+
+
+class MyProfileView(LoginRequiredMixin, generic.UpdateView):
+    form_class = MyProfileForm
+    template_name = "core/my_profile.html"
+    success_url = reverse_lazy("core:my-profile")
+
+    def get_object(self, **kwargs) -> User:
+        return self.request.user
