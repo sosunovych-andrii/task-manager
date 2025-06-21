@@ -49,6 +49,20 @@ class Worker(AbstractUser):
     class Meta:
         ordering = ["username"]
 
+    def clean(self) -> None:
+        super().clean()
+        errors = {}
+        if self.first_name and not self.first_name.isalpha():
+            errors["first_name"] = ["First name must contain only letters."]
+        if self.last_name and not self.last_name.isalpha():
+            errors["last_name"] = ["Last name must contain only letters."]
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)
+
 
 class TaskType(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -102,9 +116,13 @@ class Task(models.Model):
     def clean(self) -> None:
         super().clean()
         if self.deadline and self.deadline < timezone.now() + timedelta(minutes=30):
-            raise ValidationError(
-                "Deadline must be at least 30 minutes from now."
-            )
+            raise ValidationError({
+                "deadline": "Deadline must be at least 30 minutes from now."
+            })
+
+    def save(self, *args, **kwargs) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
