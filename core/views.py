@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
-from core.forms import SignUpForm, MyProfileForm
+from core.forms import SignUpForm, MyProfileForm, WorkerForm
 from core.models import Project, Task, Worker
 
 
@@ -98,3 +98,18 @@ class MyProfileView(LoginRequiredMixin, generic.UpdateView):
 
     def get_object(self, **kwargs) -> User:
         return self.request.user
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    form_class = WorkerForm
+    context_object_name = "worker"
+    template_name = "core/worker_form.html"
+    success_url = reverse_lazy("core:worker-list")
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Worker
+    context_object_name = "worker"
+    template_name = "core/worker_delete.html"
+    success_url = reverse_lazy("core:worker-list")

@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.forms import ModelForm
+
+from core.models import Worker
 
 
 class SignUpForm(UserCreationForm):
@@ -28,6 +31,25 @@ class MyProfileForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
+        fields = (
+            "username", "position", "project",
+            "first_name", "last_name", "email"
+        )
+
+
+class WorkerForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["position"].widget.attrs.update({
+            "class": "select-field",
+        })
+        self.fields["project"].widget.attrs.update({
+            "class": "select-field"
+        })
+        self.fields["username"].help_text = ""
+
+    class Meta:
+        model = Worker
         fields = (
             "username", "position", "project",
             "first_name", "last_name", "email"
