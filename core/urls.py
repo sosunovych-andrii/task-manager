@@ -7,8 +7,10 @@ from core.views import (
     WorkerListView,
     TaskListView,
     MyProfileView,
-    WorkerUpdateView, WorkerDeleteView,
-
+    WorkerUpdateView,
+    WorkerDeleteView,
+    ProjectUpdateView,
+    ProjectDeleteView,
 )
 
 
@@ -20,7 +22,9 @@ urlpatterns = [
     path("tasks/", TaskListView.as_view(), name="task-list"),
     path("my-profile/", MyProfileView.as_view(), name="my-profile"),
     path("workers/<int:pk>/update/", WorkerUpdateView.as_view(), name="worker-update"),
-    path("workers/<int:pk>/delete/", WorkerDeleteView.as_view(), name="worker-delete")
+    path("workers/<int:pk>/delete/", WorkerDeleteView.as_view(), name="worker-delete"),
+    path("projects/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"),
+    path("projects/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete")
 ]
 
 app_name = "core"

@@ -119,3 +119,24 @@ class WorkerDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteVi
 
     def test_func(self) -> bool:
         return self.request.user.is_superuser
+
+
+class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Project
+    fields = ("name", "description")
+    context_object_name = "project"
+    template_name = "core/project_form.html"
+    success_url = reverse_lazy("core:project-list")
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser
+
+
+class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Project
+    context_object_name = "project"
+    template_name = "core/project_delete.html"
+    success_url = reverse_lazy("core:project-list")
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser

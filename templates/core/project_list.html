@@ -8,6 +8,12 @@
         <p><strong>Description:<br></strong>{{ project.description }}</p>
         <p><strong>Tasks:</strong> {{ project.tasks_count }}</p>
         <p><strong>Workers:</strong> {{ project.workers_count }}</p>
+        {% if user.is_superuser %}
+          <div class="d-flex justify-content-end">
+            <a href="{% url 'core:project-update' pk=project.pk %}" class="btn btn-primary mr-2">Update</a>
+            <a href="{% url 'core:project-delete' pk=project.pk %}" class="btn btn-danger">Delete</a>
+          </div>
+        {% endif %}
       </div>
     {% endfor %}
   </div>
