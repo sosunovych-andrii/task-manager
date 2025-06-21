@@ -4,7 +4,7 @@
   <div class="grid">
     {% for worker in worker_list %}
       <div class="card">
-        <h3>{{ worker.username }}</h3>
+        <h3>{{ worker.username }} {% if user == worker %}(me){% endif %}</h3>
         <p><strong>First name: </strong>{{ worker.first_name }}</p>
         <p><strong>Last name: </strong>{{ worker.last_name }}</p>
         <p><strong>Email: </strong>{{ worker.email }}</p>
@@ -12,6 +12,12 @@
         <p><strong>Project: </strong>{{ worker.project.name }}</p>
         <p><strong>Total assigned tasks: </strong>{{ worker.tasks_count }}</p>
         <p><strong>Completed tasks: </strong>{{ worker.completed_tasks }}</p>
+        {% if user.is_superuser %}
+          <div class="d-flex justify-content-end">
+            <a href="{% url 'core:worker-update' pk=worker.pk %}" class="btn btn-primary mr-2">Update</a>
+            <a href="{% url 'core:worker-delete' pk=worker.pk %}" class="btn btn-danger">Delete</a>
+          </div>
+        {% endif %}
       </div>
     {% endfor %}
   </div>
