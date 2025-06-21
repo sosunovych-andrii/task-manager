@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import ModelForm
+from django import forms
 
-from core.models import Worker
+from core.models import Worker, Task
 
 
 class SignUpForm(UserCreationForm):
@@ -54,3 +55,20 @@ class WorkerForm(ModelForm):
             "username", "position", "project",
             "first_name", "last_name", "email"
         )
+
+
+class TaskForm(ModelForm):
+    class Meta:
+        model = Task
+        fields = (
+        "name", "deadline",
+        "priority", "task_type",
+        "project", "worker",
+        "description"
+        )
+        widgets = {
+            "priority": forms.Select(attrs={"class": "select-field"}),
+            "task_type": forms.Select(attrs={"class": "select-field"}),
+            "project": forms.Select(attrs={"class": "select-field"}),
+            "worker": forms.Select(attrs={"class": "select-field"})
+        }

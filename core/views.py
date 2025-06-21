@@ -7,7 +7,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
-from core.forms import SignUpForm, MyProfileForm, WorkerForm
+from core.forms import (
+    SignUpForm,
+    MyProfileForm,
+    WorkerForm,
+    TaskForm
+)
 from core.models import Project, Task, Worker
 
 
@@ -137,6 +142,27 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteV
     context_object_name = "project"
     template_name = "core/project_delete.html"
     success_url = reverse_lazy("core:project-list")
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser
+
+
+class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Task
+    form_class = TaskForm
+    content_object_name = "task"
+    template_name = "core/task_form.html"
+    success_url = reverse_lazy("core:task-list")
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser
+
+
+class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Task
+    context_object_name = "task"
+    template_name = "core/task_delete.html"
+    success_url = reverse_lazy("core:task-list")
 
     def test_func(self) -> bool:
         return self.request.user.is_superuser
