@@ -38,7 +38,7 @@ class MyProfileForm(UserChangeForm):
         )
 
 
-class WorkerForm(ModelForm):
+class WorkerUpdateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["position"].widget.attrs.update({
@@ -54,6 +54,28 @@ class WorkerForm(ModelForm):
         fields = (
             "username", "position", "project",
             "first_name", "last_name", "email"
+        )
+
+
+class WorkerCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["position"].widget.attrs.update({
+            "class": "select-field",
+        })
+        self.fields["project"].widget.attrs.update({
+            "class": "select-field"
+        })
+        for field in ["password1", "password2", "username"]:
+            self.fields[field].help_text = ""
+
+    class Meta(UserCreationForm.Meta):
+        model = Worker
+        fields = (
+            "username", "position",
+            "project", "first_name",
+            "last_name", "email",
+            "password1", "password2"
         )
 
 

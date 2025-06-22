@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <div class="create-update-container">
-    <h3>{% if worker %}Update{% else %}Create{% endif %} Worker</h3>
+  <div class="form-container">
+    <h3>Update Worker</h3>
     <form action="" method="post" novalidate>
       {% csrf_token %}
       {{ form|crispy }}
