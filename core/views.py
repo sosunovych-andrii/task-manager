@@ -93,7 +93,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().select_related(
-            "task_type", "project", "worker"
+            "task_type", "project", "assignee"
         )
 
 

@@ -13,7 +13,7 @@
         <p><strong>Description:<br></strong>{{ task.description }}</p>
         <p><strong>Task Type: </strong>{{ task.task_type.name }}</p>
         <p><strong>Project: </strong>{{ task.project.name }}</p>
-        <p><strong>Worker: </strong>{{ task.worker.username }}</p>
+        <p><strong>Assignee: </strong>{{ task.assignee.username }}</p>
         <p><strong>Status: </strong>not specified</p>
         {% if user.is_superuser %}
           <div class="d-flex justify-content-end mt-auto">

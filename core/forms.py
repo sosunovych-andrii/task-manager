@@ -85,12 +85,12 @@ class TaskForm(ModelForm):
         fields = (
         "name", "deadline",
         "priority", "task_type",
-        "project", "worker",
+        "project", "assignee",
         "description"
         )
         widgets = {
             "priority": forms.Select(attrs={"class": "select-field"}),
             "task_type": forms.Select(attrs={"class": "select-field"}),
             "project": forms.Select(attrs={"class": "select-field"}),
-            "worker": forms.Select(attrs={"class": "select-field"})
+            "assignee": forms.Select(attrs={"class": "select-field"})
         }

@@ -99,7 +99,7 @@ class TaskAdmin(admin.ModelAdmin):
         "is_completed",
         "task_type",
         "project",
-        "worker"
+        "assignee"
     )
     list_filter = (
         "is_completed",
@@ -107,10 +107,10 @@ class TaskAdmin(admin.ModelAdmin):
         "priority",
         "task_type",
         "project",
-        "worker"
+        "assignee"
     )
     list_select_related = ("task_type", "project", "worker")
     list_editable = ("deadline",)
     search_fields = ("name", "description")
     date_hierarchy = "deadline"
-    autocomplete_fields = ("project", "worker")
+    autocomplete_fields = ("project", "assignee")
