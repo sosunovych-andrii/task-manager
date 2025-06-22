@@ -10,7 +10,7 @@
         <p><strong>Email: </strong>{{ worker.email }}</p>
         <p><strong>Position: </strong>{{ worker.position.name }}</p>
         <p><strong>Project: </strong>{{ worker.project.name }}</p>
-        <p><strong>Total assigned tasks: </strong>{{ worker.tasks_count }}</p>
+        <p><strong>Currently assigned tasks: </strong>{{ worker.tasks_count }}</p>
         <p><strong>Completed tasks: </strong>{{ worker.completed_tasks }}</p>
         {% if user.is_superuser %}
           <div class="d-flex justify-content-end">

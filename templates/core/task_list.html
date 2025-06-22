@@ -13,7 +13,7 @@
         <p><strong>Worker: </strong>{{ task.worker.username }}</p>
         <p><strong>Status: </strong>not specified</p>
         {% if user.is_superuser %}
-          <div class="d-flex justify-content-end">
+          <div class="d-flex justify-content-end mt-auto">
             <a href="{% url 'core:task-update' pk=task.pk %}" class="btn btn-primary mr-2">Update</a>
             <a href="{% url 'core:task-delete' pk=task.pk %}" class="btn btn-danger">Delete</a>
           </div>
