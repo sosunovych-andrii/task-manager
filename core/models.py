@@ -4,8 +4,6 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from datetime import timedelta
 
-from task_manager import settings
-
 
 class Project(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -102,12 +100,18 @@ class Task(models.Model):
         related_name="tasks",
         blank=True
     )
-    worker = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
+    assignee = models.ForeignKey(
+        to=Worker,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="tasks",
+        related_name="assigned_tasks",
         blank=True
+    )
+    created_by = models.ForeignKey(
+        to=Worker,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="created_tasks"
     )
 
     class Meta:
