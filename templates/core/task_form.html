@@ -2,12 +2,16 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <div class="create-update-container">
+  <div class="form-container">
     <h3>{% if task %}Update{% else %}Create{% endif %} Task</h3>
     <form action="" method="post" novalidate>
       {% csrf_token %}
       {{ form|crispy }}
-      <input type="Submit" class="btn btn-primary" value="Update">
+      {% if task %}
+        <input type="Submit" class="btn btn-primary" value="Update">
+      {% else %}
+        <input type="Submit" class="btn btn-success" value="Create">
+      {% endif %}
     </form>
   </div>
 {% endblock %}

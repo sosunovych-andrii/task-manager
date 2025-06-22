@@ -10,8 +10,9 @@ from django.views import generic
 from core.forms import (
     SignUpForm,
     MyProfileForm,
-    WorkerForm,
-    TaskForm
+    WorkerUpdateForm,
+    TaskForm,
+    WorkerCreationForm
 )
 from core.models import Project, Task, Worker
 
@@ -107,9 +108,9 @@ class MyProfileView(LoginRequiredMixin, generic.UpdateView):
 
 class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Worker
-    form_class = WorkerForm
+    form_class = WorkerUpdateForm
     context_object_name = "worker"
-    template_name = "core/worker_form.html"
+    template_name = "core/worker_update_form.html"
     success_url = reverse_lazy("core:worker-list")
 
     def test_func(self) -> bool:
@@ -166,3 +167,33 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
 
     def test_func(self) -> bool:
         return self.request.user.is_superuser
+
+
+class WorkerCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = Worker
+    form_class = WorkerCreationForm
+    context_object_name = "worker"
+    template_name = "core/worker_create_form.html"
+    success_url = reverse_lazy("core:worker-list")
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser
+
+
+class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = Project
+    fields = ("name", "description")
+    context_object_name = "project"
+    template_name = "core/project_form.html"
+    success_url = reverse_lazy("core:project-list")
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser
+
+
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    form_class = TaskForm
+    content_object_name = "task"
+    template_name = "core/task_form.html"
+    success_url = reverse_lazy("core:task-list")

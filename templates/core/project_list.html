@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% if user.is_superuser %}
+    <div class="d-flex justify-content-end mt-3 mr-4">
+      <a href="{% url 'core:project-create' %}" class="btn btn-success">Create new</a>
+    </div>
+  {% endif %}
   <div class="grid">
     {% for project in project_list %}
       <div class="card">

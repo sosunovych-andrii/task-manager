@@ -13,6 +13,9 @@ from core.views import (
     ProjectDeleteView,
     TaskUpdateView,
     TaskDeleteView,
+    WorkerCreateView,
+    ProjectCreateView,
+    TaskCreateView
 )
 
 
@@ -28,7 +31,10 @@ urlpatterns = [
     path("projects/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"),
     path("projects/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"),
     path("tasks/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
-    path("tasks/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete")
+    path("tasks/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
+    path("workers/create/", WorkerCreateView.as_view(), name="worker-create"),
+    path("projects/create/", ProjectCreateView.as_view(), name="project-create"),
+    path("tasks/create/", TaskCreateView.as_view(), name="task-create")
 ]
 
 app_name = "core"
