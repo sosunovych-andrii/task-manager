@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django import forms
 
 from core.models import Worker, Task
@@ -100,3 +100,33 @@ class TaskForm(ModelForm):
             "project": forms.Select(attrs={"class": "select-field"}),
             "assignee": forms.Select(attrs={"class": "select-field"})
         }
+
+
+class ProjectSearchForm(Form):
+    name = forms.CharField(
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by name"}
+        )
+    )
+
+
+class WorkerSearchForm(Form):
+    username = forms.CharField(
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by username"}
+        )
+    )
+
+
+class TaskSearchForm(Form):
+    name = forms.CharField(
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by name"}
+        )
+    )

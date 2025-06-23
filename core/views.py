@@ -14,7 +14,10 @@ from core.forms import (
     MyProfileForm,
     WorkerUpdateForm,
     TaskForm,
-    WorkerCreationForm
+    WorkerCreationForm,
+    ProjectSearchForm,
+    WorkerSearchForm,
+    TaskSearchForm
 )
 from core.models import Project, Task, Worker
 
@@ -61,10 +64,22 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 8
 
     def get_queryset(self) -> QuerySet:
-        return super().get_queryset().annotate(
+        queryset = super().get_queryset().annotate(
             workers_count=Count("workers"),
             tasks_count=Count("tasks")
         )
+        form = ProjectSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = ProjectSearchForm(
+            initial={"name": name}
+        )
+        return context
 
 
 class WorkerListView(LoginRequiredMixin, generic.ListView):
@@ -78,9 +93,22 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 8
 
     def get_queryset(self) -> QuerySet:
-        return super().get_queryset().select_related(
+        queryset = super().get_queryset().select_related(
             "position", "project"
         ).annotate(tasks_count=Count("assigned_tasks"))
+
+        form = WorkerSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(username__icontains=form.cleaned_data["username"])
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = WorkerSearchForm(
+            initial={"username": username}
+        )
+        return context
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
@@ -94,9 +122,21 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 4
 
     def get_queryset(self) -> QuerySet:
-        return super().get_queryset().select_related(
+        queryset = super().get_queryset().select_related(
             "task_type", "project", "assignee"
         )
+        form = TaskSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
+
+    def get_context_data(self, *, object_list = ..., **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TaskSearchForm(
+            initial={"name": name}
+        )
+        return context
 
 
 class MyProfileView(LoginRequiredMixin, generic.UpdateView):

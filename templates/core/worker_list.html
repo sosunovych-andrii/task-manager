@@ -1,11 +1,17 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-  {% if user.is_superuser %}
-    <div class="d-flex justify-content-end mt-3 mr-4">
-      <a href="{% url 'core:worker-create' %}" class="btn btn-success">Create new</a>
-    </div>
-  {% endif %}
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <form method="get" action="" class="form-inline ml-auto mr-auto">
+      {{ search_form|crispy }}
+      <button type="submit" class="btn btn-secondary mb-3">🔍</button>
+    </form>
+    {% if user.is_superuser %}
+      <a href="{% url 'core:worker-create' %}" class="btn btn-success mr-4 mb-3">Create new</a>
+    {% endif %}
+  </div>
+
   <div class="grid">
     {% for worker in worker_list %}
       <div class="card">
