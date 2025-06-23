@@ -29,7 +29,6 @@ class MyProfileForm(UserChangeForm):
         self.fields["username"].help_text = ""
         del self.fields["password"]
 
-
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
         fields = (
@@ -80,6 +79,10 @@ class WorkerCreationForm(UserCreationForm):
 
 
 class TaskForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["project"].required = True
+
     class Meta:
         model = Task
         fields = (
@@ -89,6 +92,9 @@ class TaskForm(ModelForm):
         "description"
         )
         widgets = {
+            "deadline": forms.DateTimeInput(
+                attrs={"placeholder": "YYYY-MM-DD HH:MM"}
+            ),
             "priority": forms.Select(attrs={"class": "select-field"}),
             "task_type": forms.Select(attrs={"class": "select-field"}),
             "project": forms.Select(attrs={"class": "select-field"}),
