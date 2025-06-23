@@ -111,7 +111,8 @@ class Task(models.Model):
         to=Worker,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="created_tasks"
+        related_name="created_tasks",
+        blank=True
     )
 
     class Meta:
