@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db.models import Count, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -78,7 +80,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().select_related(
             "position", "project"
-        ).annotate(tasks_count=Count("tasks"))
+        ).annotate(tasks_count=Count("assigned_tasks"))
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
@@ -90,7 +92,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "task_list"
     template_name = "core/task_list.html"
     paginate_by = 4
-    
+
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().select_related(
             "task_type", "project", "assignee"
@@ -156,7 +158,10 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
     success_url = reverse_lazy("core:task-list")
 
     def test_func(self) -> bool:
-        return self.request.user.is_superuser
+        return (
+                self.request.user.is_superuser or
+                self.get_object().created_by == self.request.user
+        )
 
 
 class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -166,7 +171,10 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
     success_url = reverse_lazy("core:task-list")
 
     def test_func(self) -> bool:
-        return self.request.user.is_superuser
+        return (
+                self.request.user.is_superuser or
+                self.get_object().created_by == self.request.user
+        )
 
 
 class WorkerCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -197,3 +205,25 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     content_object_name = "task"
     template_name = "core/task_form.html"
     success_url = reverse_lazy("core:task-list")
+
+    def form_valid(self, form) -> HttpResponse:
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+
+@login_required
+def task_mark_completed(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+    task = get_object_or_404(Task, pk=pk)
+    if (
+        not request.user.is_superuser and
+        task.assignee != request.user and
+        task.created_by_id != request.user.id
+    ):
+        raise PermissionDenied
+    if request.method == "POST":
+        task.is_completed = True
+        task.save()
+        if task.assignee:
+            task.assignee.completed_tasks += 1
+            task.assignee.save()
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))

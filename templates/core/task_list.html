@@ -14,11 +14,33 @@
         <p><strong>Task Type: </strong>{{ task.task_type.name }}</p>
         <p><strong>Project: </strong>{{ task.project.name }}</p>
         <p><strong>Assignee: </strong>{{ task.assignee.username }}</p>
-        <p><strong>Status: </strong>not specified</p>
-        {% if user.is_superuser %}
+        <p><strong>Status: </strong>
+          {% if task.is_completed %}
+            done✅
+          {% elif task.deadline < now %}
+            failed❌
+          {% elif not task.assignee %}
+            not specified
+          {% else %}
+            pending⌛
+          {% endif %}
+        </p>
+        {% if user.is_superuser or task.assignee_id == user.id or task.created_by_id == user.id %}
           <div class="d-flex justify-content-end mt-auto">
-            <a href="{% url 'core:task-update' pk=task.pk %}" class="btn btn-primary mr-2">Update</a>
-            <a href="{% url 'core:task-delete' pk=task.pk %}" class="btn btn-danger">Delete</a>
+            <div class="mr-auto">
+              {% if not task.is_completed %}
+              <form method="post" action="{% url 'core:task-mark-completed' pk=task.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">✔️</button>
+              </form>
+              {% endif %}
+            </div>
+            {% if user.is_superuser or task.created_by_id == user.id %}
+              <div class="ml-auto">
+                <a href="{% url 'core:task-update' pk=task.pk %}" class="btn btn-primary mr-2">Update</a>
+                <a href="{% url 'core:task-delete' pk=task.pk %}" class="btn btn-danger">Delete</a>
+              </div>
+            {% endif %}
           </div>
         {% endif %}
       </div>
