@@ -109,7 +109,7 @@ class TaskAdmin(admin.ModelAdmin):
         "project",
         "assignee"
     )
-    list_select_related = ("task_type", "project", "worker")
+    list_select_related = ("task_type", "project", "assignee")
     list_editable = ("deadline",)
     search_fields = ("name", "description")
     date_hierarchy = "deadline"
