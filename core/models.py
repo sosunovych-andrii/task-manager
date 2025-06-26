@@ -27,8 +27,6 @@ class Position(models.Model):
 
 
 class Worker(AbstractUser):
-    completed_tasks = models.PositiveIntegerField(default=0)
-
     position = models.ForeignKey(
         to=Position,
         on_delete=models.SET_NULL,

@@ -30,7 +30,6 @@
         <p><strong>Position: </strong>{{ worker.position.name }}</p>
         <p><strong>Project: </strong>{{ worker.project.name }}</p>
         <p><strong>Currently assigned tasks: </strong>{{ worker.tasks_count }}</p>
-        <p><strong>Completed tasks: </strong>{{ worker.completed_tasks }}</p>
         {% if user.is_superuser %}
           <div class="d-flex justify-content-end">
             <a href="{% url 'core:worker-update' pk=worker.pk %}" class="btn btn-primary mr-2">Update</a>

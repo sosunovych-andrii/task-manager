@@ -303,7 +303,4 @@ def task_mark_completed(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     if request.method == "POST":
         task.is_completed = True
         Task.objects.filter(pk=pk).update(is_completed=True)
-        if task.assignee:
-            task.assignee.completed_tasks += 1
-            task.assignee.save()
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
