@@ -8,6 +8,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
+from django.utils import timezone
 
 from core.forms import (
     SignUpForm,
@@ -98,16 +99,25 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
         ).annotate(tasks_count=Count("assigned_tasks"))
 
         form = WorkerSearchForm(self.request.GET)
-        if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+        if not form.is_valid():
+            return queryset
+
+        data = form.cleaned_data
+        if data["position"]:
+            queryset = queryset.filter(position=data["position"])
+        if data["project"]:
+            queryset = queryset.filter(project=data["project"])
+        if data["username"]:
+            queryset = queryset.filter(username__icontains=data["username"])
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        username = self.request.GET.get("username", "")
-        context["search_form"] = WorkerSearchForm(
-            initial={"username": username}
-        )
+        context["search_form"] = WorkerSearchForm(initial={
+            "position": self.request.GET.get("position", ""),
+            "project": self.request.GET.get("project", ""),
+            "username": self.request.GET.get("username", ""),
+        })
         return context
 
 
@@ -126,16 +136,46 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             "task_type", "project", "assignee"
         )
         form = TaskSearchForm(self.request.GET)
-        if form.is_valid():
-            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        if not form.is_valid():
+            return queryset
+
+        data = form.cleaned_data
+        if data["assigned_to_me"] == "yes":
+            queryset = queryset.filter(assignee=self.request.user)
+        if data["assigned_to_me"] == "no":
+            queryset = queryset.exclude(assignee=self.request.user)
+        if data["created_by_me"] == "yes":
+            queryset = queryset.filter(created_by=self.request.user)
+        if data["created_by_me"] == "no":
+            queryset = queryset.exclude(created_by=self.request.user)
+        if data["status"] == "done":
+            queryset = queryset.filter(is_completed=True)
+        if data["status"] == "not_done":
+            queryset = queryset.filter(is_completed=False)
+        if data["name"]:
+            queryset = queryset.filter(name__icontains=data["name"])
+        if data["priority"]:
+            queryset = queryset.filter(priority=data["priority"])
+        if data["task_type"]:
+            queryset = queryset.filter(task_type=data["task_type"])
+        if data["project"]:
+            queryset = queryset.filter(project=data["project"])
+
         return queryset
 
     def get_context_data(self, *, object_list = ..., **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        name = self.request.GET.get("name", "")
-        context["search_form"] = TaskSearchForm(
-            initial={"name": name}
-        )
+        context["now"] = timezone.now()
+        context["search_form"] = TaskSearchForm(initial={
+            "name": self.request.GET.get("name", ""),
+            "status": self.request.GET.get("status", ""),
+            "assigned_to_me": self.request.GET.get("assigned_to_me", ""),
+            "created_by_me": self.request.GET.get("created_by_me", ""),
+            "priority": self.request.GET.get("priority", ""),
+            "task_type": self.request.GET.get("task_type", ""),
+            "project": self.request.GET.get("project", ""),
+        })
+
         return context
 
 
@@ -262,7 +302,7 @@ def task_mark_completed(request: HttpRequest, pk: int) -> HttpResponseRedirect:
         raise PermissionDenied
     if request.method == "POST":
         task.is_completed = True
-        task.save()
+        Task.objects.filter(pk=pk).update(is_completed=True)
         if task.assignee:
             task.assignee.completed_tasks += 1
             task.assignee.save()
