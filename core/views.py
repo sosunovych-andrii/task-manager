@@ -59,15 +59,17 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     View class that displays a paginated list of projects
     with related workers and tasks count.
     """
+
     model = Project
     context_object_name = "project_list"
     template_name = "core/project_list.html"
     paginate_by = 8
 
     def get_queryset(self) -> QuerySet:
-        queryset = super().get_queryset().annotate(
-            workers_count=Count("workers"),
-            tasks_count=Count("tasks")
+        queryset = (
+            super()
+            .get_queryset()
+            .annotate(workers_count=Count("workers"), tasks_count=Count("tasks"))
         )
         form = ProjectSearchForm(self.request.GET)
         if form.is_valid():
@@ -77,9 +79,7 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = ProjectSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = ProjectSearchForm(initial={"name": name})
         return context
 
 
@@ -88,15 +88,19 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     View class that displays a paginated list of workers
     with related position, project fields and tasks count
     """
+
     model = Worker
     context_object_name = "worker_list"
     template_name = "core/worker_list.html"
     paginate_by = 8
 
     def get_queryset(self) -> QuerySet:
-        queryset = super().get_queryset().select_related(
-            "position", "project"
-        ).annotate(tasks_count=Count("assigned_tasks"))
+        queryset = (
+            super()
+            .get_queryset()
+            .select_related("position", "project")
+            .annotate(tasks_count=Count("assigned_tasks"))
+        )
 
         form = WorkerSearchForm(self.request.GET)
         if not form.is_valid():
@@ -113,11 +117,13 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        context["search_form"] = WorkerSearchForm(initial={
-            "position": self.request.GET.get("position", ""),
-            "project": self.request.GET.get("project", ""),
-            "username": self.request.GET.get("username", ""),
-        })
+        context["search_form"] = WorkerSearchForm(
+            initial={
+                "position": self.request.GET.get("position", ""),
+                "project": self.request.GET.get("project", ""),
+                "username": self.request.GET.get("username", ""),
+            }
+        )
         return context
 
 
@@ -126,14 +132,15 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     View class that displays a paginated list of tasks
     with related task_type, project and worker fields
     """
+
     model = Task
     context_object_name = "task_list"
     template_name = "core/task_list.html"
     paginate_by = 4
 
     def get_queryset(self) -> QuerySet:
-        queryset = super().get_queryset().select_related(
-            "task_type", "project", "assignee"
+        queryset = (
+            super().get_queryset().select_related("task_type", "project", "assignee")
         )
         form = TaskSearchForm(self.request.GET)
         if not form.is_valid():
@@ -163,18 +170,20 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
 
         return queryset
 
-    def get_context_data(self, *, object_list = ..., **kwargs) -> dict:
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         context["now"] = timezone.now()
-        context["search_form"] = TaskSearchForm(initial={
-            "name": self.request.GET.get("name", ""),
-            "status": self.request.GET.get("status", ""),
-            "assigned_to_me": self.request.GET.get("assigned_to_me", ""),
-            "created_by_me": self.request.GET.get("created_by_me", ""),
-            "priority": self.request.GET.get("priority", ""),
-            "task_type": self.request.GET.get("task_type", ""),
-            "project": self.request.GET.get("project", ""),
-        })
+        context["search_form"] = TaskSearchForm(
+            initial={
+                "name": self.request.GET.get("name", ""),
+                "status": self.request.GET.get("status", ""),
+                "assigned_to_me": self.request.GET.get("assigned_to_me", ""),
+                "created_by_me": self.request.GET.get("created_by_me", ""),
+                "priority": self.request.GET.get("priority", ""),
+                "task_type": self.request.GET.get("task_type", ""),
+                "project": self.request.GET.get("project", ""),
+            }
+        )
 
         return context
 
@@ -239,8 +248,8 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
 
     def test_func(self) -> bool:
         return (
-                self.request.user.is_superuser or
-                self.get_object().created_by == self.request.user
+            self.request.user.is_superuser
+            or self.get_object().created_by == self.request.user
         )
 
 
@@ -252,8 +261,8 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
 
     def test_func(self) -> bool:
         return (
-                self.request.user.is_superuser or
-                self.get_object().created_by == self.request.user
+            self.request.user.is_superuser
+            or self.get_object().created_by == self.request.user
         )
 
 
@@ -295,9 +304,9 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 def task_mark_completed(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     task = get_object_or_404(Task, pk=pk)
     if (
-        not request.user.is_superuser and
-        task.assignee != request.user and
-        task.created_by_id != request.user.id
+        not request.user.is_superuser
+        and task.assignee != request.user
+        and task.created_by_id != request.user.id
     ):
         raise PermissionDenied
     if request.method == "POST":

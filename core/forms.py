@@ -7,7 +7,7 @@ from core.models import Worker, Task, TaskType, Project, Position
 
 
 class SignUpForm(UserCreationForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         for field in ["password1", "password2", "username"]:
             self.fields[field].help_text = ""
@@ -38,7 +38,7 @@ class MyProfileForm(UserChangeForm):
 
 
 class WorkerUpdateForm(ModelForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.fields["position"].widget.attrs.update({
             "class": "select-field",
@@ -57,7 +57,7 @@ class WorkerUpdateForm(ModelForm):
 
 
 class WorkerCreationForm(UserCreationForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.fields["position"].widget.attrs.update({
             "class": "select-field",
@@ -79,17 +79,17 @@ class WorkerCreationForm(UserCreationForm):
 
 
 class TaskForm(ModelForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.fields["project"].required = True
 
     class Meta:
         model = Task
         fields = (
-        "name", "deadline",
-        "priority", "task_type",
-        "project", "assignee",
-        "description"
+            "name", "deadline",
+            "priority", "task_type",
+            "project", "assignee",
+            "description"
         )
         widgets = {
             "deadline": forms.DateTimeInput(
@@ -136,19 +136,31 @@ class WorkerSearchForm(Form):
 
 class TaskSearchForm(Form):
     assigned_to_me = forms.ChoiceField(
-        choices=[("", "----------"), ("yes", "Yes"), ("no", "No")],
+        choices=[
+            ("", "----------"),
+            ("yes", "Yes"),
+            ("no", "No")
+        ],
         required=False,
         widget=forms.Select(attrs={"class": "select-field"}),
         label="Assigned to me"
     )
     status = forms.ChoiceField(
-        choices=[("", "----------"), ("done", "Completed"), ("not_done", "Not completed")],
+        choices=[
+            ("", "----------"),
+            ("done", "Completed"),
+            ("not_done", "Not completed")
+        ],
         required=False,
         widget=forms.Select(attrs={"class": "select-field"}),
         label="Status"
     )
     created_by_me = forms.ChoiceField(
-        choices=[("", "----------"), ("yes", "Yes"), ("no", "No")],
+        choices=[
+            ("", "----------"),
+            ("yes", "Yes"),
+            ("no", "No")
+        ],
         required=False,
         widget=forms.Select(attrs={"class": "select-field"}),
         label="Created by me"

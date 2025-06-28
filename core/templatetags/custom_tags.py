@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.simple_tag(takes_context=True)
 def add_query_param(context: dict, **kwargs) -> str:
     request = context["request"]
