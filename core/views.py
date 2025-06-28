@@ -245,7 +245,7 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
 
     model = Task
     form_class = TaskForm
-    content_object_name = "task"
+    context_object_name = "task"
     template_name = "core/task_form.html"
     success_url = reverse_lazy("core:task-list")
 
@@ -302,7 +302,7 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
     model = Task
     form_class = TaskForm
-    content_object_name = "task"
+    context_object_name = "task"
     template_name = "core/task_form.html"
     success_url = reverse_lazy("core:task-list")
 
@@ -319,7 +319,7 @@ def task_mark_completed(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     if (
         not request.user.is_superuser
         and task.assignee != request.user
-        and task.created_by_id != request.user.id
+        and task.created_by != request.user
     ):
         raise PermissionDenied
     if request.method == "POST":
