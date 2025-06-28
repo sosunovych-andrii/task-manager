@@ -15,7 +15,7 @@
       {% endfor %}
       <button type="submit" class="btn btn-secondary mt-2">🔍</button>
     </form>
-    <a href="{% url 'core:task-create' %}" class="btn btn-success mr-4 mb-1">Create new</a>
+    <a href="{% url 'core:task-create' %}" class="btn btn-success mr-4 mt-2">Create new</a>
   </div>
 
   <div class="grid">
@@ -52,7 +52,7 @@
             </div>
             {% if user.is_superuser or task.created_by_id == user.id %}
               <div class="ml-auto">
-                <a href="{% url 'core:task-update' pk=task.pk %}" class="btn btn-primary mr-2">Update</a>
+                <a href="{% url 'core:task-update' pk=task.pk %}" class="btn btn-primary mr-1">Update</a>
                 <a href="{% url 'core:task-delete' pk=task.pk %}" class="btn btn-danger">Delete</a>
               </div>
             {% endif %}

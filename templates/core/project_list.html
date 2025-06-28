@@ -3,12 +3,14 @@
 
 {% block content %}
   <div class="d-flex justify-content-between align-items-center mt-3">
-    <form method="get" action="" class="form-inline ml-auto mr-auto">
-      {{ search_form|crispy }}
-      <button type="submit" class="btn btn-secondary mb-3">🔍</button>
+    <form method="get" action="" class="form-inline ml-4 mr-auto">
+      <div class="mt-4">
+        {{ search_form|crispy }}
+      </div>
+      <button type="submit" class="btn btn-secondary mt-2">🔍</button>
     </form>
     {% if user.is_superuser %}
-      <a href="{% url 'core:project-create' %}" class="btn btn-success mr-4 mb-3">Create new</a>
+      <a href="{% url 'core:project-create' %}" class="btn btn-success mt-2 mr-4">Create new</a>
     {% endif %}
   </div>
 
@@ -20,8 +22,8 @@
         <p><strong>Tasks:</strong> {{ project.tasks_count }}</p>
         <p><strong>Workers:</strong> {{ project.workers_count }}</p>
         {% if user.is_superuser %}
-          <div class="d-flex justify-content-end mt-auto">
-            <a href="{% url 'core:project-update' pk=project.pk %}" class="btn btn-primary mr-2">Update</a>
+          <div class="ml-auto mt-auto">
+            <a href="{% url 'core:project-update' pk=project.pk %}" class="btn btn-primary mr-1">Update</a>
             <a href="{% url 'core:project-delete' pk=project.pk %}" class="btn btn-danger">Delete</a>
           </div>
         {% endif %}

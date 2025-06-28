@@ -16,7 +16,7 @@
       <button type="submit" class="btn btn-secondary mt-2">🔍</button>
     </form>
     {% if user.is_superuser %}
-      <a href="{% url 'core:worker-create' %}" class="btn btn-success mr-4 mb-1">Create new</a>
+      <a href="{% url 'core:worker-create' %}" class="btn btn-success mr-4 mt-2">Create new</a>
     {% endif %}
   </div>
 
@@ -31,8 +31,8 @@
         <p><strong>Project: </strong>{{ worker.project.name }}</p>
         <p><strong>Currently assigned tasks: </strong>{{ worker.tasks_count }}</p>
         {% if user.is_superuser %}
-          <div class="d-flex justify-content-end">
-            <a href="{% url 'core:worker-update' pk=worker.pk %}" class="btn btn-primary mr-2">Update</a>
+          <div class="ml-auto mt-auto">
+            <a href="{% url 'core:worker-update' pk=worker.pk %}" class="btn btn-primary mr-1">Update</a>
             <a href="{% url 'core:worker-delete' pk=worker.pk %}" class="btn btn-danger">Delete</a>
           </div>
         {% endif %}
