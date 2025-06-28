@@ -1,24 +1,26 @@
 from django.urls import path
 
-from core.views import (
-    index,
-    sign_up,
+from core.views.main_views import index
+from core.views.user_views import sign_up, MyProfileView
+from core.views.project_views import (
     ProjectListView,
-    WorkerListView,
-    TaskListView,
-    MyProfileView,
-    WorkerUpdateView,
-    WorkerDeleteView,
     ProjectUpdateView,
     ProjectDeleteView,
+    ProjectCreateView
+)
+from core.views.task_views import (
+    TaskListView,
     TaskUpdateView,
     TaskDeleteView,
-    WorkerCreateView,
-    ProjectCreateView,
     TaskCreateView,
     task_mark_completed
 )
-
+from core.views.worker_views import (
+    WorkerListView,
+    WorkerUpdateView,
+    WorkerDeleteView,
+    WorkerCreateView
+)
 
 urlpatterns = [
     path("", index, name="index"),
