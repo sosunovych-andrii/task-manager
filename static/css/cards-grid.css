@@ -30,3 +30,14 @@
 .card strong {
   color: #c6c4c4;
 }
+
+.empty-message {
+  grid-column: 1 / -1;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
