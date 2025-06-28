@@ -59,6 +59,8 @@
           </div>
         {% endif %}
       </div>
+    {% empty %}
+      <h4 class="empty-message" >No tasks found.</h4>
     {% endfor %}
   </div>
 {% endblock %}

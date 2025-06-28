@@ -37,6 +37,8 @@
           </div>
         {% endif %}
       </div>
+    {% empty %}
+      <h4 class="empty-message" >No workers found.</h4>
     {% endfor %}
   </div>
 {% endblock %}
