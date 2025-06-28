@@ -24,7 +24,7 @@ from core.models import Project, Task, Worker
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    """View function for the home page of the site."""
+    """Renders the home page with counts of projects, tasks and workers"""
     num_projects = Project.objects.count()
     num_tasks = Task.objects.count()
     num_workers = Worker.objects.count()
@@ -39,7 +39,8 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def sign_up(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
-    """View function that handles user sign-up, authenticates and logs if the form is valid."""
+    """Handles user registration, authentication and login"""
+
     form = SignUpForm()
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -55,10 +56,7 @@ def sign_up(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
 
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
-    """
-    View class that displays a paginated list of projects
-    with related workers and tasks count.
-    """
+    """Displays a paginated list of projects with filtering support"""
 
     model = Project
     context_object_name = "project_list"
@@ -84,10 +82,7 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
 
 
 class WorkerListView(LoginRequiredMixin, generic.ListView):
-    """
-    View class that displays a paginated list of workers
-    with related position, project fields and tasks count
-    """
+    """Displays a paginated list of workers with filtering support"""
 
     model = Worker
     context_object_name = "worker_list"
@@ -128,10 +123,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
-    """
-    View class that displays a paginated list of tasks
-    with related task_type, project and worker fields
-    """
+    """Displays a paginated list of tasks with filtering support"""
 
     model = Task
     context_object_name = "task_list"
@@ -189,6 +181,8 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
 
 
 class MyProfileView(LoginRequiredMixin, generic.UpdateView):
+    """Allows users to view and update their profile information"""
+
     form_class = MyProfileForm
     template_name = "core/my_profile.html"
     success_url = reverse_lazy("core:my-profile")
@@ -198,6 +192,8 @@ class MyProfileView(LoginRequiredMixin, generic.UpdateView):
 
 
 class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    """Allows admins to update info about workers"""
+
     model = Worker
     form_class = WorkerUpdateForm
     context_object_name = "worker"
@@ -209,6 +205,7 @@ class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateVi
 
 
 class WorkerDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    """Allows admins to delete workers"""
     model = Worker
     context_object_name = "worker"
     template_name = "core/worker_delete.html"
@@ -219,6 +216,8 @@ class WorkerDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteVi
 
 
 class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    """Allows admins to update info about projects"""
+
     model = Project
     fields = ("name", "description")
     context_object_name = "project"
@@ -230,6 +229,8 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateV
 
 
 class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    """Allows admins to delete projects"""
+
     model = Project
     context_object_name = "project"
     template_name = "core/project_delete.html"
@@ -240,6 +241,8 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteV
 
 
 class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    """Allows admins or task creators info about tasks"""
+
     model = Task
     form_class = TaskForm
     content_object_name = "task"
@@ -254,6 +257,8 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
 
 
 class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    """Allows admins or task creators to delete tasks"""
+
     model = Task
     context_object_name = "task"
     template_name = "core/task_delete.html"
@@ -267,6 +272,8 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
 
 
 class WorkerCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    """Allows admins to create new workers"""
+
     model = Worker
     form_class = WorkerCreationForm
     context_object_name = "worker"
@@ -278,6 +285,8 @@ class WorkerCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateVi
 
 
 class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    """Allows admins to create new projects"""
+
     model = Project
     fields = ("name", "description")
     context_object_name = "project"
@@ -289,6 +298,8 @@ class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateV
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    """Allows both users and admins to create tasks"""
+
     model = Task
     form_class = TaskForm
     content_object_name = "task"
@@ -302,6 +313,8 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
 @login_required
 def task_mark_completed(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+    """Marks a task as completed if user is an admin, assignee or creator"""
+
     task = get_object_or_404(Task, pk=pk)
     if (
         not request.user.is_superuser
