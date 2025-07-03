@@ -96,7 +96,6 @@ class Task(models.Model):
         to=Project,
         on_delete=models.CASCADE,
         related_name="tasks",
-        blank=True
     )
     assignee = models.ForeignKey(
         to=Worker,
