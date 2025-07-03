@@ -117,7 +117,7 @@ class Task(models.Model):
 
     def clean(self) -> None:
         super().clean()
-        if self.deadline and self.deadline < timezone.now() + timedelta(minutes=30):
+        if self.deadline and self.deadline <= timezone.now() + timedelta(minutes=30):
             raise ValidationError(
                 {"deadline": "Deadline must be at least 30 minutes from now."}
             )
