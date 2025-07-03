@@ -2,14 +2,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
-from core.models import(
+from core.models import (
     Project,
     Position,
     Worker,
     TaskType,
     Task
 )
-
 
 admin.site.unregister(Group)
 
@@ -58,7 +57,7 @@ class WorkerAdmin(UserAdmin):
         (
             "Permissions",
             {
-            "fields": ("is_active", "is_staff", "is_superuser"),
+                "fields": ("is_active", "is_staff", "is_superuser"),
             }
         ),
         (
