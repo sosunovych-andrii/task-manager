@@ -29,7 +29,7 @@
         <p><strong>Email: </strong>{{ worker.email }}</p>
         <p><strong>Position: </strong>{{ worker.position.name }}</p>
         <p><strong>Project: </strong>{{ worker.project.name }}</p>
-        <p><strong>Currently assigned tasks: </strong>{{ worker.tasks_count }}</p>
+        <p><strong>Assigned tasks: </strong>{{ worker.tasks_count }}</p>
         {% if user.is_superuser %}
           <div class="ml-auto mt-auto">
             <a href="{% url 'core:worker-update' pk=worker.pk %}" class="btn btn-primary mr-1">Update</a>
