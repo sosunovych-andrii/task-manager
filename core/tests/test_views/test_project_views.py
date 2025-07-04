@@ -57,7 +57,8 @@ class ProjectListViewTests(TestCase):
         queryset = view.get_queryset().values("name", "workers_count", "tasks_count")
         expected_queryset = (
             Project.objects.annotate(
-                workers_count=Count("workers"), tasks_count=Count("tasks")
+                workers_count=Count("workers", disctinct=True),
+                tasks_count=Count("tasks", disctinct=True)
             )
             .filter(name__icontains="Project0")
             .values("name", "workers_count", "tasks_count")

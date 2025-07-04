@@ -21,7 +21,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
             super()
             .get_queryset()
             .select_related("position", "project")
-            .annotate(tasks_count=Count("assigned_tasks"))
+            .annotate(tasks_count=Count("assigned_tasks", distinct=True))
         )
 
         form = WorkerSearchForm(self.request.GET)

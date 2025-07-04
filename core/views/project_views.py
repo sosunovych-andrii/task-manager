@@ -19,11 +19,14 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
         queryset = (
             super()
             .get_queryset()
-            .annotate(workers_count=Count("workers"), tasks_count=Count("tasks"))
+            .annotate(
+                workers_count=Count("workers", distinct=True),
+                tasks_count=Count("tasks", distinct=True)
+            )
         )
         form = ProjectSearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(name__icontains=form.cleaned_data["name"])
+            queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:

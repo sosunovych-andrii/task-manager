@@ -68,7 +68,7 @@ class WorkerListViewTests(TestCase):
         )
         expected_queryset = (
             Worker.objects.select_related("position", "project")
-            .annotate(tasks_count=Count("assigned_tasks"))
+            .annotate(tasks_count=Count("assigned_tasks", distinct=True))
             .filter(
                 position=self.position,
                 project=self.project,
@@ -89,7 +89,7 @@ class WorkerListViewTests(TestCase):
         )
         expected_queryset = (
             Worker.objects.select_related("position", "project")
-            .annotate(tasks_count=Count("assigned_tasks"))
+            .annotate(tasks_count=Count("assigned_tasks", disctinct=True))
             .values("username", "tasks_count", "position", "project")
         )
         self.assertEqual(list(queryset.values()), list(expected_queryset.values()))
