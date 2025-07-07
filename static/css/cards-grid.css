@@ -1,0 +1,43 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.card {
+  background-color: #1e2a38;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 10px 10px 10px rgba(0,0,0,0.2);
+}
+
+.card h3 {
+  margin-bottom: 1rem;
+  color: #7dbfff;
+}
+
+.card p {
+  margin: 0.5rem 0;
+}
+
+.card strong {
+  color: #c6c4c4;
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}

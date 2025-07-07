@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <form method="get" action="" class="form-inline ml-4 mr-auto">
+      {% for field in search_form %}
+        {% if field != search_form.username %}
+          {{ field|as_crispy_field }}
+        {% else %}
+          <div class="mt-4">
+            {{ field|as_crispy_field }}
+          </div>
+        {% endif %}
+      {% endfor %}
+      <button type="submit" class="btn btn-secondary mt-2">🔍</button>
+    </form>
+    {% if user.is_superuser %}
+      <a href="{% url 'core:worker-create' %}" class="btn btn-success mr-4 mt-2">Create new</a>
+    {% endif %}
+  </div>
+
+  <div class="grid">
+    {% for worker in worker_list %}
+      <div class="card">
+        <h3>{{ worker.username }} {% if user == worker %}(me){% endif %}</h3>
+        <p><strong>First name: </strong>{{ worker.first_name }}</p>
+        <p><strong>Last name: </strong>{{ worker.last_name }}</p>
+        <p><strong>Email: </strong>{{ worker.email }}</p>
+        <p><strong>Position: </strong>{{ worker.position.name }}</p>
+        <p><strong>Project: </strong>{{ worker.project.name }}</p>
+        <p><strong>Assigned tasks: </strong>{{ worker.tasks_count }}</p>
+        {% if user.is_superuser %}
+          <div class="ml-auto mt-auto">
+            <a href="{% url 'core:worker-update' pk=worker.pk %}" class="btn btn-primary mr-1">Update</a>
+            <a href="{% url 'core:worker-delete' pk=worker.pk %}" class="btn btn-danger">Delete</a>
+          </div>
+        {% endif %}
+      </div>
+    {% empty %}
+      <h4 class="empty-message" >No workers found.</h4>
+    {% endfor %}
+  </div>
+{% endblock %}

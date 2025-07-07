@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="page-title">Task Manager for an IT Company</h1>
+  <p class="description">
+    This project is designed to organize and track work within an IT company.<br>
+    It enables efficient assignment, monitoring, and management of tasks during the development process.
+    Admins have full control over users, projects, and all tasks, while users can manage their own tasks and stay
+    informed.
+  </p>
+  <section class="stats-section">
+    <div class="stat-box tasks-box">
+      <span class="stat-icon">📋</span>
+      <h3 class="stat-number">{{ num_tasks }}</h3>
+      <p class="stat-label">Task{% if num_tasks != 1 %}s{% endif %}</p>
+    </div>
+    <div class="stat-box workers-box">
+      <span class="stat-icon">👨🏽‍💼</span>
+      <h3 class="stat-number">{{ num_workers }}</h3>
+      <p class="stat-label">Worker{% if num_workers != 1 %}s{% endif %}</p>
+    </div>
+    <div class="stat-box projects-box">
+      <span class="stat-icon">🗃️</span>
+      <h3 class="stat-number">{{ num_projects }}</h3>
+      <p class="stat-label">Project{% if num_projects != 1 %}s{% endif %}</p>
+    </div>
+    <div class="stat-box efficiency-box">
+      <span class="stat-icon">📈</span>
+      <h3 class="stat-end-label">Streamline<br>Your Workflow</h3>
+    </div>
+  </section>
+
+{% endblock %}
