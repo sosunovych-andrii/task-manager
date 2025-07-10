@@ -1,24 +1,22 @@
 # Task Manager 📌
-
 **TaskManager** is a Django-based web application designed to organize and track work within an IT company.  
 It enables efficient assignment, monitoring, and management of tasks during the development process.
 
 Admins have full control over users, projects, and all tasks, while users can manage their own tasks  
 and stay informed about their responsibilities and company environment.
 
-## 💻 Tech Stack
+## 💫 Check it out!
+https://task-manager-pxq2.onrender.com/
 
----
+## 💻 Tech Stack
 - Python3.13🐍 
 - Django5.2🌐
 - SQLite (dev) / PostgreSQL (prod)🛢️
-- Bootstrap5 + Custom CSS🎨
+- Bootstrap4 + Custom CSS🎨
 - Logic-enabled HTML Templates🧾
 - Coverage.py (for testing)✅
 
-## 🌟 Features 
-
----
+## 🌟 Features
 - Role-based access (Admin / User)
 - Customized admin panel
 - Task management with assignment, status control, priority and deadlines
@@ -36,12 +34,9 @@ and stay informed about their responsibilities and company environment.
 - Test coverage to ensure code reliability and maintainability
 
 ## 🧱 Database Schema
-
----
 ![schema.png](screenshots/schema.png)
-## 🛠 Installation
 
----
+## 🛠 Installation
 > ⚠️ **Prerequisites:**  
 Make sure you have **python 3.13** and **pip** installed on your system.  
 You can check with:
@@ -66,19 +61,26 @@ You can check with:
 ```bash
   pip install -r requirements.txt
 ```
-4. Apply migrations:
+4. Collect staticfiles
+```bash
+  python manage.py collectstatic --no-input
+```
+5. Create a .env file in the root directory of the project and copy the content from .env.sample,
+replacing the placeholder values with your own:
+```bash
+  cp .env.sample .env
+```
+6. Apply migrations:
 ```bash
   python manage.py migrate
 ```
-5. Run the development server:
+7. Run the development server:
 ```bash
   python manage.py runserver
   # Then open http://127.0.0.1:8000/ in your browser
 ```
 
 ## 🔐 Demo Login Credentials
-
----
 Explore the application using the following demo accounts:
 
 | Role   | Username | Password    |
@@ -89,8 +91,6 @@ Explore the application using the following demo accounts:
 > ⚠️ You can also create your own account via registration form.
 
 ## 📸 Screenshots
-
----
 <details>
 <summary>🔽 Click to expand Admin Interface</summary>
   <img src="screenshots/img.png"/>
